@@ -1,0 +1,55 @@
+<resources>
+    <string name="banner_ad_unit_id">ca-app-pub-4322301902835072/3601726569</string>
+    <string name="oyla">Rate This App</string>
+    <string name="market">My Other Apps</string>
+    <string name="app_name">Soft Keys 2 - Home Back Button</string>
+    <string name="anasayfa">Home</string>
+    <string name="ayarlar">Settings</string>
+    <string name="str1">ACCESSIBILITY</string>
+    <string name="str3">
+        - give permissions if asked\n
+        - press Accessibility button\n
+        - find Soft Keys 2 - Home Back Button and enable it\n
+        - now it works, you can change the settings\n
+        - if you have a problem, please write me\n
+        enjoy it :)</string>
+    <string name="aciklama">I would not want to bring you here, but i don\'t have authority to change settings :(</string>
+    <string name="str4">Recents</string>
+    <string name="str5">Home</string>
+    <string name="str6">Back</string>
+    <string name="str8">Button Bar Position : </string>
+    <string name="str9">Height : </string>
+    <string name="str10">Transparency : </string>
+    <string name="str14">Touch to show keys</string>
+    <string name="str15">Width : </string>
+    <string name="str17">Button Icons : </string>
+    <string name="str18">Long Press : </string>
+    <string name="str19">Vibrate : </string>
+    <string name="str20">Button Sequence : </string>
+    <string-array name="spiner_icin">
+        <item>Bottom</item>
+        <item>Right</item>
+        <item>Left</item>
+        <item>Top</item>
+    </string-array>
+    <string-array name="spiner_icin_2">
+        <item>Old</item>
+        <item>New</item>
+        <item>New 2</item>
+    </string-array>
+    <string-array name="spiner_icin_3">
+        <item>Itself</item>
+        <item>Hide Keys</item>
+        <item>Change Position</item>
+    </string-array>
+    <string-array name="spiner_icin_4">
+        <item>None</item>
+        <item>Home</item>
+        <item>Back</item>
+        <item>Recents</item>
+    </string-array>
+    <string-array name="spiner_icin_5">
+        <item>Off</item>
+        <item>On</item>
+    </string-array>
+</resources>
