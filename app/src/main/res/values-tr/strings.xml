@@ -1,19 +1,21 @@
 <resources>
-    <string name="banner_ad_unit_id">ca-app-pub-4322301902835072/3601726569</string>
     <string name="oyla">Uygulamayı Oyla</string>
     <string name="market">Diğer Uygulamalarım</string>
     <string name="app_name">Ekran Tuşu 2 - Home Back Button</string>
     <string name="anasayfa">Anasayfa</string>
     <string name="ayarlar">Ayarlar</string>
-    <string name="str1">ERİŞEBİLİRLİK</string>
+    <string name="str1">ERİŞİLEBİLİRLİK</string>
+    <string name="str2">İZİNLER</string>
+    <string name="perms_ok">tüm izinler TAMAM</string>
     <string name="str3">
+        - \"İzinler\" tuşuna dokun\n
         - isterse gerekli izinleri ver\n
-        - Erişilebilirlik tuşuna tıkla\n
-        - Ekran Tuşu 2 - Home Back Buttonu bul ve aktifleştir\n
-        - şimdi çalışması lazım, ayarları yapabilirsin\n
-        - eğer bir problem olursa bana yaz\n
+        - \"Erişilebilirlik\" tuşuna dokun\n
+        - Ekran Tuşu 2\' yi bul ve aktifleştir\n
+        - şimdi çalışması lazım, geri dönüp ayarları yapabilirsin\n
+        - beğendiysen beş yıldız verebilirsin\n
         güle güle kullan :)</string>
-    <string name="aciklama">Seni buralara kadar getirmek istemezdim, ama ayarları değiştirmeye yetkim yokki :(</string>
+    <string name="aciklama">ekran tuşlarını aktifleştirir</string>
     <string name="str4">Recents</string>
     <string name="str5">Home</string>
     <string name="str6">Back</string>
@@ -33,12 +35,15 @@
         <item>Üst</item>
     </string-array>
     <string-array name="spiner_icin_2">
-        <item>Eski</item>
-        <item>Yeni</item>
-        <item>Yeni 2</item>
+        <item>Tema 1</item>
+        <item>Tema 2</item>
+        <item>Tema 3</item>
+        <item>Tema 4</item>
+        <item>Tema 5</item>
+        <item>Tema 6</item>
     </string-array>
     <string-array name="spiner_icin_3">
-        <item>Kendisi</item>
+        <item>Boş</item>
         <item>Tuşları Gizle</item>
         <item>Konumu Değiştir</item>
     </string-array>
