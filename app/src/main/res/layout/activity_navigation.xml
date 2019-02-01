@@ -54,33 +54,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/str1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/buton2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="40dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/oyla"
-                    android:src="@drawable/ic_oyla" />
-
-                <ImageButton
-                    android:id="@+id/buton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="40dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/market"
-                    android:src="@drawable/ic_market" />
-            </LinearLayout>
+                android:text="@string/str2" />
+            <Button
+                android:id="@+id/buton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/str1" />
 
         </LinearLayout>
     </ScrollView>

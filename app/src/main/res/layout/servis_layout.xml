@@ -13,7 +13,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/str4"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_recent" />
+        android:src="@mipmap/ic_recent1" />
 
     <ImageButton
         android:id="@+id/home"
@@ -23,7 +23,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/str5"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_home" />
+        android:src="@mipmap/ic_home1" />
 
     <ImageButton
         android:id="@+id/back"
@@ -33,5 +33,5 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/str6"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_back" />
+        android:src="@mipmap/ic_back1" />
 </LinearLayout>
