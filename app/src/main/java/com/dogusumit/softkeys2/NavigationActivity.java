@@ -35,9 +35,6 @@ public class NavigationActivity extends AppCompatActivity {
 
         try {
 
-            izinleriKontrolEt();
-
-
             final ScrollView homelayout = findViewById(R.id.homelayout);
             final ScrollView settinglayout = findViewById(R.id.settingslayout);
             BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -62,20 +59,15 @@ public class NavigationActivity extends AppCompatActivity {
             (findViewById(R.id.buton1)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(intent);
+                    if (izinleriKontrolEt())
+                        toastla(getString(R.string.perms_ok));
                 }
             });
             (findViewById(R.id.buton2)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    uygulamayiOyla();
-                }
-            });
-            (findViewById(R.id.buton3)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    marketiAc();
+                    Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivity(intent);
                 }
             });
 
@@ -91,14 +83,18 @@ public class NavigationActivity extends AppCompatActivity {
             final Spinner spinner6 = findViewById(R.id.spinner6);
             final Spinner spinner7 = findViewById(R.id.spinner7);
 
-            //seekbar1.setMax(100);
-            //seekbar2.setMax(20);
+            seekbar1.setMax(100);
+            seekbar2.setMax(100);
             seekbar3.setMax(255);
 
             final SharedPreferences settings = getApplicationContext().getSharedPreferences("com.dogusumit.softkeys2", 0);
             final SharedPreferences.Editor editor = settings.edit();
-            int genislik = settings.getInt("genislik", 0);
-            int yukseklik = settings.getInt("yukseklik", 0);
+            if (settings.getInt("version", 1) != 2) {
+                settings.edit().clear().apply();
+                settings.edit().putInt("version", 2).apply();
+            }
+            int genislik = settings.getInt("genislik", 100);
+            int yukseklik = settings.getInt("yukseklik", 25);
             int seffaflik = settings.getInt("seffaflik", 0);
             int konum = settings.getInt("konum", 0);
             int ikon = settings.getInt("ikon", 0);
@@ -163,15 +159,6 @@ public class NavigationActivity extends AppCompatActivity {
             spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if ( position == 0 || position == 3 ) {
-                        seekbar1.setMax(100);
-                        seekbar2.setMax(20);
-                    }
-                    else if ( position == 1 || position == 2) {
-                        seekbar1.setMax(20);
-                        seekbar2.setMax(100);
-                    }
-
                     editor.putInt("konum", position).apply();
                     if (isAccessibilityEnabled() && izinleriKontrolEt())
                         servisGuncelle();
@@ -382,10 +369,8 @@ public class NavigationActivity extends AppCompatActivity {
                 if (!Settings.canDrawOverlays(this)) {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:" + getPackageName()));
-                    startActivity(intent);
+                    startActivityForResult(intent, 0);
                     rtrn = false;
-                } else {
-                    rtrn = true;
                 }
             }
             NotificationManager notificationManager =
@@ -393,7 +378,7 @@ public class NavigationActivity extends AppCompatActivity {
             if (notificationManager != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
                     Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivity(intent);
+                    startActivityForResult(intent, 0);
                     rtrn = false;
                 } else {
                     rtrn = true;

@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -54,13 +55,16 @@ public class AccesService extends AccessibilityService {
     protected void onServiceConnected() {
         try {
 
-
             isEnabled = true;
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             linearLayout = (LinearLayout) inflater.inflate(R.layout.servis_layout, null);
             settings = getApplicationContext().getSharedPreferences("com.dogusumit.softkeys2", 0);
 
+            if (settings.getInt("version", 1) != 2) {
+                settings.edit().clear().apply();
+                settings.edit().putInt("version", 2).apply();
+            }
 
             back = linearLayout.findViewById(R.id.back);
             home = linearLayout.findViewById(R.id.home);
@@ -124,10 +128,11 @@ public class AccesService extends AccessibilityService {
                 windowManager.removeViewImmediate(linearLayout);
 
 
-            int genislik = settings.getInt("genislik", 0);
-            genislik *= ( Resources.getSystem().getDisplayMetrics().widthPixels / 100.0 );
-            int yukseklik = settings.getInt("yukseklik", 0);
-            yukseklik *= ( Resources.getSystem().getDisplayMetrics().heightPixels / 100.0 );
+            double telefon_genislik = Resources.getSystem().getDisplayMetrics().widthPixels / 100.0;
+            double telefon_yukseklik = Resources.getSystem().getDisplayMetrics().heightPixels / 100.0;
+
+            final int genislik = settings.getInt("genislik", 100);
+            int yukseklik = settings.getInt("yukseklik", 25);
             final int seffaflik = settings.getInt("seffaflik", 0);
             int konum = settings.getInt("konum", 0);
             int ikon = settings.getInt("ikon", 0);
@@ -143,19 +148,34 @@ public class AccesService extends AccessibilityService {
 
             switch (ikon) {
                 case 0:
-                    back.setImageResource(R.mipmap.ic_back);
-                    home.setImageResource(R.mipmap.ic_home);
-                    recent.setImageResource(R.mipmap.ic_recent);
+                    back.setImageResource(R.mipmap.ic_back1);
+                    home.setImageResource(R.mipmap.ic_home1);
+                    recent.setImageResource(R.mipmap.ic_recent1);
                     break;
                 case 1:
-                    back.setImageResource(R.mipmap.ic_ucgen);
-                    home.setImageResource(R.mipmap.ic_yuvarlak);
-                    recent.setImageResource(R.mipmap.ic_kare);
+                    back.setImageResource(R.mipmap.ic_back2);
+                    home.setImageResource(R.mipmap.ic_home2);
+                    recent.setImageResource(R.mipmap.ic_recent2);
                     break;
                 case 2:
-                    back.setImageResource(R.mipmap.ic_ucgen2);
-                    home.setImageResource(R.mipmap.ic_yuvarlak2);
-                    recent.setImageResource(R.mipmap.ic_kare2);
+                    back.setImageResource(R.mipmap.ic_back3);
+                    home.setImageResource(R.mipmap.ic_home3);
+                    recent.setImageResource(R.mipmap.ic_recent3);
+                    break;
+                case 3:
+                    back.setImageResource(R.mipmap.ic_back4);
+                    home.setImageResource(R.mipmap.ic_home4);
+                    recent.setImageResource(R.mipmap.ic_recent4);
+                    break;
+                case 4:
+                    back.setImageResource(R.mipmap.ic_back5);
+                    home.setImageResource(R.mipmap.ic_home5);
+                    recent.setImageResource(R.mipmap.ic_recent5);
+                    break;
+                case 5:
+                    back.setImageResource(R.mipmap.ic_back6);
+                    home.setImageResource(R.mipmap.ic_home6);
+                    recent.setImageResource(R.mipmap.ic_recent6);
                     break;
             }
 
@@ -264,15 +284,14 @@ public class AccesService extends AccessibilityService {
                             @Override
                             public boolean onLongClick(View v) {
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putInt("konum", 2).apply();
-
-                                int tmp_gen = settings.getInt("genislik",0);
-                                int tmp_yuk = settings.getInt("yukseklik",0);
-                                if (tmp_gen > tmp_yuk) {
-                                    editor.putInt("yukseklik",tmp_gen).apply();
+                                int tmp_knm = settings.getInt("konum", 0);
+                                if (tmp_knm == 0 || tmp_knm == 3) {
+                                    int tmp_gen = settings.getInt("genislik",100);
+                                    int tmp_yuk = settings.getInt("yukseklik",25);
                                     editor.putInt("genislik",tmp_yuk).apply();
+                                    editor.putInt("yukseklik",tmp_gen).apply();
                                 }
-
+                                editor.putInt("konum", 2).apply();
                                 konumAyarla();
                                 return true;
                             }
@@ -282,18 +301,18 @@ public class AccesService extends AccessibilityService {
                             @Override
                             public boolean onLongClick(View v) {
                                 SharedPreferences.Editor editor = settings.edit();
-                                if (settings.getInt("konum", 0) == 0)
+                                int tmp_knm = settings.getInt("konum", 0);
+                                if (tmp_knm == 0)
                                     editor.putInt("konum", 3).apply();
-                                else
+                                else if (tmp_knm == 3)
                                     editor.putInt("konum", 0).apply();
-
-                                int tmp_gen = settings.getInt("genislik",0);
-                                int tmp_yuk = settings.getInt("yukseklik",0);
-                                if (tmp_yuk > tmp_gen) {
-                                    editor.putInt("yukseklik",tmp_gen).apply();
+                                else {
+                                    int tmp_gen = settings.getInt("genislik",100);
+                                    int tmp_yuk = settings.getInt("yukseklik",25);
                                     editor.putInt("genislik",tmp_yuk).apply();
+                                    editor.putInt("yukseklik",tmp_gen).apply();
+                                    editor.putInt("konum", 0).apply();
                                 }
-
                                 konumAyarla();
                                 return true;
                             }
@@ -303,15 +322,14 @@ public class AccesService extends AccessibilityService {
                             @Override
                             public boolean onLongClick(View v) {
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putInt("konum", 1).apply();
-
-                                int tmp_gen = settings.getInt("genislik",0);
-                                int tmp_yuk = settings.getInt("yukseklik",0);
-                                if (tmp_gen > tmp_yuk) {
-                                    editor.putInt("yukseklik",tmp_gen).apply();
+                                int tmp_knm = settings.getInt("konum", 0);
+                                if (tmp_knm == 0 || tmp_knm == 3) {
+                                    int tmp_gen = settings.getInt("genislik",100);
+                                    int tmp_yuk = settings.getInt("yukseklik",25);
                                     editor.putInt("genislik",tmp_yuk).apply();
+                                    editor.putInt("yukseklik",tmp_gen).apply();
                                 }
-
+                                editor.putInt("konum", 1).apply();
                                 konumAyarla();
                                 return true;
                             }
@@ -335,9 +353,8 @@ public class AccesService extends AccessibilityService {
             switch (konum) {
                 case 0:
                     params = new WindowManager.LayoutParams(
-                            (genislik > 0) ? genislik : WindowManager.LayoutParams.MATCH_PARENT,
-                            (yukseklik > 0) ? yukseklik : WindowManager.LayoutParams.WRAP_CONTENT,
-                            layout_type,
+                            (int) (genislik * telefon_genislik),
+                            (int) (yukseklik * telefon_yukseklik / 5.0), layout_type,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
                     params.gravity = Gravity.BOTTOM;
@@ -345,9 +362,8 @@ public class AccesService extends AccessibilityService {
                     break;
                 case 1:
                     params = new WindowManager.LayoutParams(
-                            (genislik > 0) ? genislik : WindowManager.LayoutParams.WRAP_CONTENT,
-                            (yukseklik > 0) ? yukseklik : WindowManager.LayoutParams.MATCH_PARENT,
-                            layout_type,
+                            (int) (genislik * telefon_genislik / 5.0),
+                            (int) (yukseklik * telefon_yukseklik), layout_type,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
                     params.gravity = Gravity.END;
@@ -355,9 +371,8 @@ public class AccesService extends AccessibilityService {
                     break;
                 case 2:
                     params = new WindowManager.LayoutParams(
-                            (genislik > 0) ? genislik : WindowManager.LayoutParams.WRAP_CONTENT,
-                            (yukseklik > 0) ? yukseklik : WindowManager.LayoutParams.MATCH_PARENT,
-                            layout_type,
+                            (int) (genislik * telefon_genislik / 5.0),
+                            (int) (yukseklik * telefon_yukseklik), layout_type,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
                     params.gravity = Gravity.START;
@@ -365,16 +380,14 @@ public class AccesService extends AccessibilityService {
                     break;
                 case 3:
                     params = new WindowManager.LayoutParams(
-                            (genislik > 0) ? genislik : WindowManager.LayoutParams.MATCH_PARENT,
-                            (yukseklik > 0) ? yukseklik : WindowManager.LayoutParams.WRAP_CONTENT,
-                            layout_type,
+                            (int) (genislik * telefon_genislik),
+                            (int) (yukseklik * telefon_yukseklik / 5.0), layout_type,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
                     params.gravity = Gravity.TOP;
                     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                     break;
             }
-
 
             linearLayout.getBackground().setAlpha(255 - seffaflik);
             windowManager.addView(linearLayout, params);
@@ -436,11 +449,11 @@ public class AccesService extends AccessibilityService {
             if (Build.VERSION.SDK_INT >= 26) {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 if (vibrator != null)
-                    vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                    vibrator.vibrate(VibrationEffect.createOneShot(70, VibrationEffect.DEFAULT_AMPLITUDE));
             } else {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 if (vibrator != null)
-                    vibrator.vibrate(100);
+                    vibrator.vibrate(70);
             }
         } catch (Exception e) {
             toastla(e.getLocalizedMessage());
@@ -479,4 +492,9 @@ public class AccesService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        konumAyarla();
+    }
 }
