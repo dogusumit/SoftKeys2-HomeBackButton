@@ -2,20 +2,24 @@
     <string name="oyla">Uygulamayı Oyla</string>
     <string name="market">Diğer Uygulamalarım</string>
     <string name="app_name">Ekran Tuşu 2 - Home Back Button</string>
-    <string name="anasayfa">Anasayfa</string>
+    <string name="anasayfa">Aktifleştir</string>
     <string name="ayarlar">Ayarlar</string>
-    <string name="str1">ERİŞİLEBİLİRLİK</string>
+    <string name="str1">Erişilebilirlik Servisi *</string>
     <string name="str2">İZİNLER</string>
-    <string name="perms_ok">tüm izinler TAMAM</string>
-    <string name="str3">
-        - \"İzinler\" tuşuna dokun\n
-        - isterse gerekli izinleri ver\n
-        - \"Erişilebilirlik\" tuşuna dokun\n
-        - Ekran Tuşu 2\' yi bul ve aktifleştir\n
-        - şimdi çalışması lazım, geri dönüp ayarları yapabilirsin\n
-        - beğendiysen beş yıldız verebilirsin\n
-        güle güle kullan :)</string>
-    <string name="aciklama">ekran tuşlarını aktifleştirir</string>
+    <string name="battery_optimization">PİL TASARRUFU</string>
+    <string name="perm_overlay">Diğer uygulamaların üzerinde göster</string>
+    <string name="perm_notifications">Bildirim gönderimi</string>
+    <string name="perm_battery">Pil optimizasyonunu yoksay</string>
+    <string name="perm_dnd">Rahatsız etmeyin bildirimleri</string>
+    <string name="desc_overlay">Butonları diğer uygulamaların üzerinde gösterebilmek için bu izne ihtiyacım var. Android de sonradan yüklenen hiçbir uygulama gerçek butonlar gibi ekranın altına yerleşemez, sadece diğer uygulamaların üzerine çıkabilir.</string>
+    <string name="desc_notifications">Butonlar gizlendiği zaman tekrar göstermek için bildirime tıklamanız gerekir. Bildirimi gösterebilmem için bu izne ihtiyacım var.\nButon gizleme özelliği kullanmayacaksınız bu izni vermenize gerek yok.</string>
+    <string name="desc_battery">Uygulamanın kesintisiz çalışabilmesi için pil optimizasyonundan muaf tutulması gerekir. Aksi durumda bir süre sonra butonlar kendiliğinden kaybolacaktır.</string>
+    <string name="desc_dnd">Butonlar gizlendiği zaman tekrar göstermek için bildirime tıklamanız gerekir. Rahatsız etmeyin modunda bildirim gösterebilmem için bu izne ihtiyacım var.\nButon gizleme özelliği kullanmayacaksınız bu izni vermenize gerek yok.</string>
+    <string name="perms_ok">Tüm izinler TAMAM</string>
+    <string name="str_instructions_title">Soft Keys 2 Kullanım Talimatları</string>
+    <string name="str3">Android kuralları gereği aşağıdaki izinleri vererek beni aktif edebilirsin.</string>
+    <string name="accessibility_disclosure_title">Erişilebilirlik Servisi Kullanımı</string>
+    <string name="accessibility_disclosure_message">Bu uygulama; Geri, Ana Sayfa ve Son Uygulamalar gibi sistem düzeyindeki işlemleri gerçekleştirmek için Erişilebilirlik Hizmetlerini kullanır. Bu hizmetler, uygulamanın temel işlevselliği (ekran üzeri navigasyon tuşları sağlamak) için gereklidir. Bu hizmetler aracılığıyla hiçbir kişisel veri toplanmaz veya paylaşılmaz.</string>
     <string name="str4">Recents</string>
     <string name="str5">Home</string>
     <string name="str6">Back</string>
@@ -57,4 +61,5 @@
         <item>Kapalı</item>
         <item>Açık</item>
     </string-array>
+    <string name="str_five_stars">Beğendiysen bana beş yıldız verebilirsin, güle güle kullan :)</string>
 </resources>

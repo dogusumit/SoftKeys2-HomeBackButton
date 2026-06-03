@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text sizes -->
+    <dimen name="text_size_title">18sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_label">12sp</dimen>
+    <dimen name="text_size_small">11sp</dimen>
+    
+    <!-- Toolbar -->
+    <dimen name="toolbar_title_size">18sp</dimen>
+    <dimen name="toolbar_padding">16dp</dimen>
+    <dimen name="toolbar_padding_end">16dp</dimen>
+    <dimen name="toolbar_icon_size">48dp</dimen>
+    <dimen name="toolbar_icon_padding">12dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">20dp</dimen>
+    
+    <!-- Content padding -->
+    <dimen name="content_padding">16dp</dimen>
+    <dimen name="section_padding">8dp</dimen>
+    
+    <!-- Checkbox -->
+    <dimen name="checkbox_text_size">14sp</dimen>
+    <dimen name="checkbox_padding">4dp</dimen>
+    
+    <!-- Spinner -->
+    <dimen name="spinner_label_width">90dp</dimen>
+    <dimen name="spinner_item_padding">8dp</dimen>
+    
+    <!-- Divider -->
+    <dimen name="divider_margin">8dp</dimen>
+</resources>

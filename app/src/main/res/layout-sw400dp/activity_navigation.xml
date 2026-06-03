@@ -18,7 +18,7 @@
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:itemIconSize="32dp"
+        app:itemIconSize="54dp"
         app:labelVisibilityMode="labeled"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -54,28 +54,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                android:textSize="@dimen/text_size_body"
                 android:text="@string/accessibility_disclosure_message"
                 android:textColor="#FF0000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                android:layout_marginTop="@dimen/spacing_large"
                 android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
                 android:text="@string/str_instructions_title" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:textSize="@dimen/text_size_body"
                 android:gravity="start"
                 android:text="@string/str3" />
 
@@ -83,38 +86,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp">
+                android:paddingLeft="@dimen/content_padding"
+                android:paddingRight="@dimen/content_padding"
+                android:paddingBottom="@dimen/content_padding">
 
                 <CheckBox
                     android:id="@+id/check_accessibility"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/checkbox_text_size"
+                    android:padding="@dimen/checkbox_padding"
                     android:text="@string/str1" />
 
                 <CheckBox
                     android:id="@+id/check_overlay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/checkbox_text_size"
+                    android:padding="@dimen/checkbox_padding"
                     android:text="@string/perm_overlay" />
 
                 <CheckBox
                     android:id="@+id/check_battery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/checkbox_text_size"
+                    android:padding="@dimen/checkbox_padding"
                     android:text="@string/perm_battery" />
 
                 <CheckBox
                     android:id="@+id/check_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/checkbox_text_size"
+                    android:padding="@dimen/checkbox_padding"
                     android:text="@string/perm_notifications" />
 
                 <CheckBox
                     android:id="@+id/check_dnd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/checkbox_text_size"
+                    android:padding="@dimen/checkbox_padding"
                     android:text="@string/perm_dnd" />
 
             </LinearLayout>
@@ -136,7 +149,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/content_padding"
             android:orientation="vertical">
 
             <LinearLayout
@@ -149,12 +162,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="@dimen/section_padding">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str8"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_label"
                         android:textColor="?android:attr/textColorSecondary" />
                     <Spinner
                         android:id="@+id/spinner1"
@@ -167,12 +180,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="@dimen/section_padding">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str17"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_label"
                         android:textColor="?android:attr/textColorSecondary" />
                     <Spinner
                         android:id="@+id/spinner2"
@@ -186,20 +199,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="@dimen/divider_margin"
+                android:layout_marginBottom="@dimen/divider_margin"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="8dp">
+                android:padding="@dimen/section_padding">
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/spinner_label_width"
                     android:layout_height="wrap_content"
                     android:text="@string/str15"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_label"
                     android:textColor="?android:attr/textColorSecondary" />
                 <SeekBar
                     android:id="@+id/seekbar1"
@@ -213,12 +226,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="8dp">
+                android:padding="@dimen/section_padding">
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/spinner_label_width"
                     android:layout_height="wrap_content"
                     android:text="@string/str9"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_label"
                     android:textColor="?android:attr/textColorSecondary" />
                 <SeekBar
                     android:id="@+id/seekbar2"
@@ -232,12 +245,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="8dp">
+                android:padding="@dimen/section_padding">
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/spinner_label_width"
                     android:layout_height="wrap_content"
                     android:text="@string/str10"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_label"
                     android:textColor="?android:attr/textColorSecondary" />
                 <SeekBar
                     android:id="@+id/seekbar3"
@@ -250,8 +263,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="@dimen/divider_margin"
+                android:layout_marginBottom="@dimen/divider_margin"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -263,12 +276,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="@dimen/section_padding">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str19"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_label"
                         android:textColor="?android:attr/textColorSecondary" />
                     <Spinner
                         android:id="@+id/spinner3"
@@ -281,12 +294,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="@dimen/section_padding">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str18"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_label"
                         android:textColor="?android:attr/textColorSecondary" />
                     <Spinner
                         android:id="@+id/spinner4"
@@ -300,25 +313,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="@dimen/divider_margin"
+                android:layout_marginBottom="@dimen/divider_margin"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/str20"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_label"
                 android:textColor="?android:attr/textColorSecondary"
-                android:paddingLeft="12dp"
-                android:paddingStart="12dp"
-                android:paddingTop="8dp" />
+                android:paddingTop="@dimen/spacing_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:padding="8dp">
+                android:padding="@dimen/section_padding">
                 <Spinner
                     android:id="@+id/spinner5"
                     android:layout_width="0dp"
@@ -343,12 +354,12 @@
                 android:id="@+id/text_five_stars"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/content_padding"
                 android:gravity="center"
                 android:text="@string/str_five_stars"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_body"
                 android:background="?attr/selectableItemBackground" />
 
         </LinearLayout>

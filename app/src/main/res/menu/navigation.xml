@@ -3,11 +3,11 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_anasayfa"
+        android:icon="@drawable/ic_activate"
         android:title="@string/anasayfa" />
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_ayarlar"
+        android:icon="@drawable/ic_ayarlar_vector"
         android:title="@string/ayarlar" />
 
 </menu>

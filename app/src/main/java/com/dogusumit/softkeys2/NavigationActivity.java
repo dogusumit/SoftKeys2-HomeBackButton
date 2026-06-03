@@ -5,18 +5,30 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.content.DialogInterface;
+import android.os.PowerManager;
+import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -25,8 +37,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class NavigationActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 101;
+
+    ImageButton toolbarMenu;
+    TextView toolbarTitle;
+    CheckBox checkAccessibility, checkOverlay, checkNotifications, checkBattery, checkDnd;
+
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,42 +58,86 @@ public class NavigationActivity extends AppCompatActivity {
 
         try {
 
+            // Özel toolbar'ı ayarla
+            toolbarTitle = findViewById(R.id.toolbar_title);
+            toolbarMenu = findViewById(R.id.toolbar_menu);
+            
+            toolbarMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupMenu(v);
+                }
+            });
+
             final ScrollView homelayout = findViewById(R.id.homelayout);
             final ScrollView settinglayout = findViewById(R.id.settingslayout);
             BottomNavigationView navigation = findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.navigation_home:
-                            settinglayout.setVisibility(View.GONE);
-                            homelayout.setVisibility(View.VISIBLE);
-                            return true;
-                        case R.id.navigation_settings:
-                            homelayout.setVisibility(View.GONE);
-                            settinglayout.setVisibility(View.VISIBLE);
-                            return true;
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.navigation_home) {
+                        settinglayout.setVisibility(View.GONE);
+                        homelayout.setVisibility(View.VISIBLE);
+                        return true;
+                    } else if (itemId == R.id.navigation_settings) {
+                        homelayout.setVisibility(View.GONE);
+                        settinglayout.setVisibility(View.VISIBLE);
+                        return true;
                     }
                     return false;
                 }
             });
 
 
-            (findViewById(R.id.buton1)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (izinleriKontrolEt())
-                        toastla(getString(R.string.perms_ok));
-                }
-            });
-            (findViewById(R.id.buton2)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(intent);
-                }
-            });
+            checkAccessibility = findViewById(R.id.check_accessibility);
+            checkOverlay = findViewById(R.id.check_overlay);
+            checkNotifications = findViewById(R.id.check_notifications);
+            checkBattery = findViewById(R.id.check_battery);
+            checkDnd = findViewById(R.id.check_dnd);
 
+            checkAccessibility.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAccessibilityDisclosure();
+                }
+            });
+            checkOverlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        showPermissionExplanation(R.string.perm_overlay, R.string.desc_overlay, intent, null);
+                    }
+                }
+            });
+            checkNotifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        showPermissionExplanation(R.string.perm_notifications, R.string.desc_notifications, null, android.Manifest.permission.POST_NOTIFICATIONS);
+                    }
+                }
+            });
+            checkBattery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                        showPermissionExplanation(R.string.perm_battery, R.string.desc_battery, intent, null);
+                    }
+                }
+            });
+            checkDnd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                        showPermissionExplanation(R.string.perm_dnd, R.string.desc_dnd, intent, null);
+                    }
+                }
+            });
 
             final SeekBar seekbar1 = findViewById(R.id.seekbar1);
             final SeekBar seekbar2 = findViewById(R.id.seekbar2);
@@ -91,13 +158,24 @@ public class NavigationActivity extends AppCompatActivity {
             final SharedPreferences.Editor editor = settings.edit();
             if (settings.getInt("version", 1) != 2) {
                 settings.edit().clear().apply();
-                settings.edit().putInt("version", 2).apply();
+                settings.edit().putInt("version", 2)
+                        .putInt("genislik", 100)
+                        .putInt("yukseklik", 25)
+                        .putInt("seffaflik", 0)
+                        .putInt("konum", 0)
+                        .putInt("ikon", 1)
+                        .putInt("titresim", 0)
+                        .putInt("uzunbas", 0)
+                        .putInt("sol", 3)
+                        .putInt("orta", 1)
+                        .putInt("sag", 2)
+                        .apply();
             }
             int genislik = settings.getInt("genislik", 100);
             int yukseklik = settings.getInt("yukseklik", 25);
             int seffaflik = settings.getInt("seffaflik", 0);
             int konum = settings.getInt("konum", 0);
-            int ikon = settings.getInt("ikon", 0);
+            int ikon = settings.getInt("ikon", 1);
             int titresim = settings.getInt("titresim", 0);
             int uzunbas = settings.getInt("uzunbas", 0);
             int sol = settings.getInt("sol", 3);
@@ -108,8 +186,8 @@ public class NavigationActivity extends AppCompatActivity {
             seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    editor.putInt("genislik", seekBar.getProgress()).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("genislik", progress).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -125,8 +203,8 @@ public class NavigationActivity extends AppCompatActivity {
             seekbar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    editor.putInt("yukseklik", seekBar.getProgress()).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("yukseklik", progress).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -141,8 +219,8 @@ public class NavigationActivity extends AppCompatActivity {
             seekbar3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    editor.putInt("seffaflik", seekBar.getProgress()).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("seffaflik", progress).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -159,8 +237,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("konum", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("konum", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -171,8 +249,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("ikon", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("ikon", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -183,8 +261,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("titresim", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("titresim", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -195,8 +273,21 @@ public class NavigationActivity extends AppCompatActivity {
             spinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("uzunbas", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    if (position == 1) {
+                        if (Build.VERSION.SDK_INT >= 33) {
+                            if (ContextCompat.checkSelfPermission(NavigationActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                new AlertDialog.Builder(NavigationActivity.this)
+                                        .setTitle(R.string.perm_notifications)
+                                        .setMessage(R.string.desc_notifications)
+                                        .setPositiveButton(android.R.string.ok, null)
+                                        .show();
+                                spinner4.setSelection(settings.getInt("uzunbas", 0));
+                                return;
+                            }
+                        }
+                    }
+                    settings.edit().putInt("uzunbas", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -207,8 +298,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("sol", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("sol", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -219,8 +310,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner6.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("orta", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("orta", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -231,8 +322,8 @@ public class NavigationActivity extends AppCompatActivity {
             spinner7.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    editor.putInt("sag", position).apply();
-                    if (isAccessibilityEnabled() && izinleriKontrolEt())
+                    settings.edit().putInt("sag", position).apply();
+                    if (isAccessibilityEnabled())
                         servisGuncelle();
                 }
 
@@ -253,8 +344,15 @@ public class NavigationActivity extends AppCompatActivity {
             spinner6.setSelection(orta);
             spinner7.setSelection(sag);
 
+            updatePermissionStatus();
 
-            AdView mAdView = findViewById(R.id.adView);
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+                }
+            });
+
+            mAdView = findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
 
@@ -263,6 +361,153 @@ public class NavigationActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+        updatePermissionStatus();
+        if (isAccessibilityEnabled()) {
+            servisGuncelle();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+
+    private void updatePermissionStatus() {
+        // Accessibility
+        boolean accEnabled = isAccessibilityEnabled();
+        checkAccessibility.setChecked(accEnabled);
+
+        // Overlay
+        boolean overlayEnabled = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            overlayEnabled = Settings.canDrawOverlays(this);
+        }
+        checkOverlay.setChecked(overlayEnabled);
+
+        // Notifications
+        if (Build.VERSION.SDK_INT >= 33) {
+            checkNotifications.setVisibility(View.VISIBLE);
+            boolean notifEnabled = ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+            checkNotifications.setChecked(notifEnabled);
+        } else {
+            checkNotifications.setVisibility(View.GONE);
+        }
+
+        // Battery
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            boolean batteryIgnored = pm.isIgnoringBatteryOptimizations(getPackageName());
+            checkBattery.setChecked(batteryIgnored);
+        } else {
+            checkBattery.setVisibility(View.GONE);
+        }
+
+        // DND / Notification Policy
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            boolean dndEnabled = nm.isNotificationPolicyAccessGranted();
+            checkDnd.setChecked(dndEnabled);
+        } else {
+            checkDnd.setVisibility(View.GONE);
+        }
+    }
+
+    private void showPermissionExplanation(int titleRes, int messageRes, final Intent intent, final String permission) {
+        new AlertDialog.Builder(this)
+                .setTitle(titleRes)
+                .setMessage(messageRes)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (intent != null) {
+                            try {
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                toastla(e.getLocalizedMessage());
+                            }
+                        } else if (permission != null) {
+                            ActivityCompat.requestPermissions(NavigationActivity.this, new String[]{permission}, REQUEST_CODE_POST_NOTIFICATIONS);
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updatePermissionStatus();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        updatePermissionStatus();
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        updatePermissionStatus();
+    }
+
+    private void showAccessibilityDisclosure() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.accessibility_disclosure_title)
+                .setMessage(R.string.accessibility_disclosure_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updatePermissionStatus();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        updatePermissionStatus();
+                    }
+                })
+                .show();
+    }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
+        
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
+        
+        popup.show();
+    }
 
     private void uygulamayiOyla() {
         Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
@@ -301,22 +546,27 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
+        // Artık popup menü kullandığımız için bu metod gerekli değil
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.oyla:
-                uygulamayiOyla();
-                return true;
-            case R.id.market:
-                marketiAc();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_activate) {
+            ((BottomNavigationView) findViewById(R.id.navigation)).setSelectedItemId(R.id.navigation_home);
+            return true;
+        } else if (itemId == R.id.menu_settings) {
+            ((BottomNavigationView) findViewById(R.id.navigation)).setSelectedItemId(R.id.navigation_settings);
+            return true;
+        } else if (itemId == R.id.oyla) {
+            uygulamayiOyla();
+            return true;
+        } else if (itemId == R.id.market) {
+            marketiAc();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -326,7 +576,9 @@ public class NavigationActivity extends AppCompatActivity {
 
     boolean isAccessibilityEnabled() {
         int accessibilityEnabled = 0;
-        final String ACCESSIBILITY_SERVICE_NAME = getPackageName() + "/" + AccesService.class.getCanonicalName();
+        final String ACCESSIBILITY_SERVICE_NAME = String.format("%s/%s", 
+                getPackageName(), 
+                AccesService.class.getCanonicalName());
         try {
             accessibilityEnabled = Settings.Secure.getInt(this.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException e) {
@@ -356,7 +608,6 @@ public class NavigationActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), AccesService.class);
             intent.setAction("guncelle");
             startService(intent);
-            stopService(intent);
         } catch (Exception e) {
             toastla(e.getLocalizedMessage());
         }
@@ -364,30 +615,28 @@ public class NavigationActivity extends AppCompatActivity {
 
     boolean izinleriKontrolEt() {
         try {
-            boolean rtrn = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(intent, 0);
-                    rtrn = false;
+                    return false;
                 }
             }
-            NotificationManager notificationManager =
-                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivityForResult(intent, 0);
-                    rtrn = false;
-                } else {
-                    rtrn = true;
+
+            if (Build.VERSION.SDK_INT >= 33) {
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
                 }
             }
-            return rtrn;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
+                    return false;
+                }
+            }
+            return true;
 
         } catch (Exception e) {
-            toastla(e.getLocalizedMessage());
             return false;
         }
     }

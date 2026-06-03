@@ -4,20 +4,24 @@
     <string name="oyla">Rate This App</string>
     <string name="market">My Other Apps</string>
     <string name="app_name">Soft Keys 2 - Home Back Button</string>
-    <string name="anasayfa">Home</string>
+    <string name="anasayfa">Activate</string>
     <string name="ayarlar">Settings</string>
-    <string name="str1">ACCESSIBILITY</string>
+    <string name="str1">Accessibility Service *</string>
     <string name="str2">PERMISSIONS</string>
-    <string name="perms_ok">all permissions are OK</string>
-    <string name="str3">
-        - touch \"Permissions\" button\n
-        - give permissions if asked\n
-        - touch \"Accessibility\" button\n
-        - find \"Soft Keys 2\" and enable it\n
-        - now it works, you can return and change the settings\n
-        - if you like it, you can give five stars\n
-        enjoy it :)</string>
-    <string name="aciklama">activates the on-screen keys</string>
+    <string name="battery_optimization">BATTERY OPTIMIZATION</string>
+    <string name="perm_overlay">Display over other apps</string>
+    <string name="perm_notifications">Post notifications</string>
+    <string name="perm_battery">Ignore battery optimization</string>
+    <string name="perm_dnd">Do not disturb notifications</string>
+    <string name="desc_overlay">I need this permission to be able to show the buttons over other apps. In Android, no later installed app can be placed at the bottom of the screen like real buttons, they can only appear over other apps.</string>
+    <string name="desc_notifications">To show the buttons again when they are hidden, you need to click on the notification. I need this permission to be able to show the notification.\nYou don\'t need to grant this permission if you won\'t use the button hiding feature.</string>
+    <string name="desc_battery">The application must be excluded from battery optimization to work uninterruptedly. Otherwise, the buttons will disappear on their own after a while.</string>
+    <string name="desc_dnd">To show the buttons again when they are hidden, you need to click on the notification. I need this permission to be able to show the notification in do not disturb mode.\nYou don\'t need to grant this permission if you won\'t use the button hiding feature.</string>
+    <string name="perms_ok">All permissions are OK</string>
+    <string name="str_instructions_title">Soft Keys 2 Activation Guide</string>
+    <string name="str3">Due to Android Rules, you can activate me by granting the following permissions.</string>
+    <string name="accessibility_disclosure_title">Accessibility Service Usage</string>
+    <string name="accessibility_disclosure_message">This app uses Accessibility Services to perform system-level actions such as Back, Home, and Recents. These services are essential for the core functionality of the app (providing on-screen navigation buttons). No personal data is collected or shared through these services.</string>
     <string name="str4">Recents</string>
     <string name="str5">Home</string>
     <string name="str6">Back</string>
@@ -45,7 +49,7 @@
         <item>Theme 6</item>
     </string-array>
     <string-array name="spiner_icin_3">
-        <item>Null</item>
+        <item>Empty</item>
         <item>Hide Keys</item>
         <item>Change Position</item>
     </string-array>
@@ -59,4 +63,7 @@
         <item>Off</item>
         <item>On</item>
     </string-array>
+    <string name="str_five_stars">If you like me, feel free to give me five stars. thx bro :)</string>
+    <string name="menu">Menu</string>
+    <string name="menu_btn_desc">Menu</string>
 </resources>
